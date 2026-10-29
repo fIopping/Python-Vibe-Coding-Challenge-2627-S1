@@ -101,6 +101,10 @@ Python can power artificial intelligence, physics simulations, 3D graphics, augm
 
 > **Note:** Some libraries require extra software, downloaded models, powerful hardware, webcams, or microphones. Test your setup early so you can finish a working project within the 24-hour window.
 
+## Asset Credits
+
+- `assets/puppy.jpg` — “Fawn and white Welsh Corgi puppy standing on rear legs and sticking out the tongue,” by Huoadg5888 (minor edits by Subsidiary account), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Fawn_and_white_Welsh_Corgi_puppy_standing_on_rear_legs_and_sticking_out_the_tongue.jpg). Licensed under [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/); attribution is not required.
+
 ## Competition Categories
 
 Your teacher will select one winning project in each category:

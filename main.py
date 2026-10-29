@@ -1,4 +1,5 @@
 
+import os
 import pygame
 import random
 
@@ -13,6 +14,13 @@ enemies = []
 score = 0
 font = pygame.font.SysFont(None, 35)
 game_over = False
+puppy_was_hit = False
+
+asset_dir = os.path.join(os.path.dirname(__file__), "assets")
+puppy_source = pygame.image.load(os.path.join(asset_dir, "puppy.jpg")).convert()
+crop_size = min(puppy_source.get_size())
+puppy_crop = puppy_source.subsurface(pygame.Rect(0, 0, crop_size, crop_size))
+puppy_image = pygame.transform.smoothscale(puppy_crop, (35, 35))
 
 running = True
 
@@ -35,6 +43,7 @@ while running:
                 enemies.clear()
                 score = 0
                 game_over = False
+                puppy_was_hit = False
 
     if not game_over:
         keys = pygame.key.get_pressed()
@@ -45,9 +54,11 @@ while running:
             player.x += 5
 
         if random.randint(1, 30) == 1:
-            enemies.append(
-                pygame.Rect(random.randint(0, 565), 0, 35, 35)
-            )
+            is_puppy = random.randint(1, 12) == 1
+            enemies.append({
+                "rect": pygame.Rect(random.randint(0, 565), 0, 35, 35),
+                "is_puppy": is_puppy,
+            })
 
         for bullet in bullets[:]:
             bullet.y -= 7
@@ -55,22 +66,30 @@ while running:
                 bullets.remove(bullet)
 
         for enemy in enemies[:]:
-            enemy.y += 3
+            enemy_rect = enemy["rect"]
+            enemy_rect.y += 3
 
-            if enemy.colliderect(player):
+            if enemy_rect.colliderect(player):
                 game_over = True
                 break
 
-            if enemy.top > 700:
+            if enemy_rect.top > 700:
                 enemies.remove(enemy)
                 continue
 
             for bullet in bullets[:]:
-                if enemy.colliderect(bullet):
+                if enemy_rect.colliderect(bullet):
                     enemies.remove(enemy)
                     bullets.remove(bullet)
-                    score += 1
+                    if enemy["is_puppy"]:
+                        puppy_was_hit = True
+                        game_over = True
+                    else:
+                        score += 1
                     break
+
+            if game_over:
+                break
 
         if game_over:
             enemies.clear()
@@ -82,15 +101,19 @@ while running:
         pygame.draw.rect(screen, (255, 255, 0), bullet)
 
     for enemy in enemies:
-        pygame.draw.rect(screen, (255, 60, 80), enemy)
+        if enemy["is_puppy"]:
+            screen.blit(puppy_image, enemy["rect"])
+        else:
+            pygame.draw.rect(screen, (255, 60, 80), enemy["rect"])
 
     text = font.render(f"Score: {score}", True, (255, 255, 255))
     screen.blit(text, (10, 10))
 
     if game_over:
-        title = font.render("GAME OVER!", True, (255, 60, 80))
+        message = "You shot a helpless puppy" if puppy_was_hit else "GAME OVER!"
+        title = font.render(message, True, (255, 60, 80))
         restart = font.render("Press R to restart", True, (255, 255, 255))
-        screen.blit(title, (220, 300))
+        screen.blit(title, title.get_rect(center=(300, 300)))
         screen.blit(restart, (190, 345))
 
     pygame.display.update()
