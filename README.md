@@ -1,5 +1,13 @@
 # Python Vibe Coding Challenge
 
+## Space Shooter
+
+Move with the **left and right arrow keys**, hold **Space** to fire, and avoid
+the falling enemies. Hitting a puppy ends the game; press **R** to restart.
+
+Run the game with `python main.py` after installing Pygame with
+`python -m pip install pygame`.
+
 ## Challenge Description
 
 You have **24 hours** to vibe code the best Python project you can create!
